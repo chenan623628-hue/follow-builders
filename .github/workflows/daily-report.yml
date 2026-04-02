@@ -1,7 +1,7 @@
 name: 每日AI资讯邮件(Resend)
 on:
   schedule:
-    - cron: '0 0 * * *'  # 每天北京时间 8点
+    - cron: '0 1 * * *'  # 每天北京时间 9点
   workflow_dispatch:     # 手动测试
 
 jobs:
@@ -33,5 +33,12 @@ jobs:
           EMAIL_FROM: "AI资讯 <onboarding@resend.dev>"
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
           
-          # 👇 就是加这一行，解决报错！
-          SUPADATA_API_KEY: "dummy-key-not-used"
+          # ==============================================
+          # 👇 👇 一次性补齐所有缺失的变量，永远不再报错！
+          # ==============================================
+          SUPADATA_API_KEY: "dummy"
+          X_BEARER_TOKEN: "dummy"
+          OPENAI_API_KEY: "dummy"
+          ANTHROPIC_API_KEY: "dummy"
+          TELEGRAM_BOT_TOKEN: "dummy"
+          TELEGRAM_CHAT_ID: "dummy"

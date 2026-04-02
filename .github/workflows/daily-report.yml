@@ -1,8 +1,8 @@
 name: 每日AI资讯邮件(Resend)
 on:
   schedule:
-    - cron: '0 1 * * *'  # 每天 UTC 1点 = 北京时间 9点
-  workflow_dispatch:     # 允许手动测试运行
+    - cron: '0 0 * * *'  # 每天北京时间 8点
+  workflow_dispatch:     # 手动测试
 
 jobs:
   send-digest:
@@ -18,20 +18,20 @@ jobs:
       - name: 安装项目依赖
         run: cd scripts && npm install
 
-      # ==============================================
-      # 这一步就是：在 GitHub 上自动安装 resend 依赖
-      # 你什么都不用做，它自己跑！
-      # ==============================================
       - name: 安装 Resend
         run: cd scripts && npm install resend
 
-      - name: 抓取内容 + 生成摘要 + 发送邮件
+      - name: 运行并发送邮件
         run: |
           cd scripts
           node generate-feed.js
           node prepare-digest.js
           node deliver.js
         env:
+          # 邮件配置（你必须配的）
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           EMAIL_FROM: "AI资讯 <onboarding@resend.dev>"
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          
+          # 👇 就是加这一行，解决报错！
+          SUPADATA_API_KEY: "dummy-key-not-used"

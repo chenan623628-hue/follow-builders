@@ -1,7 +1,7 @@
 name: 每日AI资讯邮件(Resend)
 on:
   schedule:
-    - cron: '0 1 * * *'
+    - cron: '0 0 * * *'
   workflow_dispatch:
 
 jobs:

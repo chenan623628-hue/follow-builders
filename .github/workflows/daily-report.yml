@@ -25,8 +25,7 @@ jobs:
         run: |
           cd scripts
           node generate-feed.js
-          node prepare-digest.js
-          node deliver.js
+          node prepare-digest.js | node deliver.js
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           EMAIL_FROM: "AI资讯 <onboarding@resend.dev>"

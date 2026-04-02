@@ -1,0 +1,29 @@
+name: Daily AI Digest Email
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 每天 UTC 0 点（北京时间 8 点）
+  workflow_dispatch:     # 允许手动触发测试
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: cd scripts && npm install
+
+      - name: Run digest
+        run: |
+          cd scripts
+          node index.js
+        env:
+          # 把你的邮箱配置填到 GitHub Secrets 里
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          SendGrid_API_KEY: ${{ secrets.SENDGRID_API_KEY }}

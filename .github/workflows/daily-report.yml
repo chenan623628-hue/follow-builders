@@ -1,29 +1,30 @@
-name: Daily AI Digest Email
+name: 每日AI资讯邮件(Resend)
 on:
   schedule:
-    - cron: '0 0 * * *'  # 每天 UTC 0 点（北京时间 8 点）
-  workflow_dispatch:     # 允许手动触发测试
+    - cron: '0 1 * * *'  # 每天 UTC 1点（北京时间 9点）发送
+  workflow_dispatch:     # 支持手动测试运行
 
 jobs:
-  build:
+  send-digest:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: 安装 Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install dependencies
+      - name: 安装依赖
         run: cd scripts && npm install
 
-      - name: Run digest
-        run: |
-          cd scripts
-          node index.js
+      - name: 安装 Resend 发信SDK
+        run: cd scripts && npm install resend
+
+      - name: 运行脚本 + 发送邮件
+        run: cd scripts && node index.js
         env:
-          # 把你的邮箱配置填到 GitHub Secrets 里
+          # Resend 配置
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          EMAIL_FROM: "AI资讯 <onboarding@resend.dev>"  # 官方免费发件箱
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
-          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
-          SendGrid_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
